@@ -1,0 +1,20 @@
+﻿<form class="form-inline" action="@Url.Action("FiltroFornecedor", "Fornecedor", new { })" method="post">
+    <div class="form-group mx-sm-1 mb-3">
+        <label name="Documento" class="control-label">Documento</label>
+        <input name="Documento" class="form-control" />
+    </div>
+
+    <div class="form-group mx-sm-4 mb-3">
+        <label name="NomeFantasia" class="control-label">Nome</label>
+        <input name="NomeFantasia" class="form-control" />
+    </div>
+
+    <div class="form-group mx-sm-4 mb-3">
+        <label name="DataCadastro" class="control-label">Data de cadastro</label>
+        <input name="DataCadastro" class="form-control  date-validation" />
+    </div>
+
+    <span class="btn-wrp form-group mx-sm-1 mb-3">
+        <button type="submit" class="btn btn-primary btn-sm">Filtrar</button>
+    </span>
+</form>

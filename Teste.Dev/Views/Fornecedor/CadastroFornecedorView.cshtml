@@ -1,0 +1,145 @@
+﻿@model Teste.Dev.Domain.Entidade.Fornecedor
+@{
+    ViewBag.Title = "Cadastro de fornecedor";
+}
+@using Teste.Dev.Domain.Enum;
+
+<div class="page-title">
+    <h4>@(ViewBag.Title)</h4>
+    <a href="javascript: history.back()"><i class="hicon-arrowl"></i></a>
+</div>
+
+<div class="main-content">
+    <form asp-action="Salvar">
+        <div asp-validation-summary="All" class="text-danger"></div>
+
+        <div class="form-group">
+            <label asp-for="Codigo" class="control-label">Código</label>
+            <input asp-for="Codigo" class="form-control" value="@Model.Codigo" readonly />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="CodigoEmpresa" class="control-label"> Código empresa</label>
+            <input asp-for="CodigoEmpresa" class="form-control" value="@Model.CodigoEmpresa" />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="NomeFantasia" class="control-label">Nome</label>
+            <input asp-for="NomeFantasia" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Documento" class="control-label"></label>
+            <input asp-for="Documento" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="RG" class="control-label"></label>
+            <input asp-for="RG" class="form-control rg-validation" />
+        </div>
+
+        @if (Model.Telefone.Count == 0)
+        {
+            <div class="telefone-group">
+
+                <div class="telefone-list">
+                    <div class="form-group">
+                        <label class="control-label">Telefone</label>
+                        <input class="form-control telefone-input" type="text" data-val="true" name="Telefone[]">
+                        <span class="text-danger field-validation-valid" data-valmsg-for="Telefone[]" data-valmsg-replace="true"></span>
+                    </div>
+                </div>
+
+                <button type="button" class="btn btn-primary add-telefone">+</button>
+            </div>
+        }
+        else
+        {
+            for (var i = 0; i < Model.Telefone.Count; i++)
+            {
+                <div class="telefone-group">
+                    <div class="telefone-list">
+                        <div class="form-group">
+                            <label class="control-label">Telefone</label>
+                            <input class="form-control telefone-input" type="text" data-val="true" name="Telefone[]" value="@Model.Telefone[i]">
+                            <span class="text-danger field-validation-valid" data-valmsg-for="Telefone[]" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <button type="button" class="btn btn-primary add-telefone">+</button>
+        }
+
+        <div class="form-group">
+            <label asp-for="Pessoa" class="control-label"></label>
+            <select asp-for="Pessoa" asp-items="Html.GetEnumSelectList<TipoPessoa>()" class="form-control"></select>
+        </div>
+
+        <div class="form-group">
+            <label name="DataNascimento" class="control-label">Data de nascimento</label>
+            <input name="DataNascimento" class="form-control date-validation" value="@Model.DataNascimento" />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Control" class="control-label" hidden></label>
+            <input asp-for="Control" class="form-control" hidden />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Id" class="control-label" hidden></label>
+            <input asp-for="Id" class="form-control" hidden />
+        </div>
+
+        <span class="btn-wrp mb-20">
+            <span class="text-danger" data-valmsg-for="Geral" data-valmsg-replace="false"></span>
+            <input type="submit" class="btn btn-primary" value="Salvar informações" />
+        </span>
+
+        @if (Model.Control == 1)
+        {
+            <span class="btn-wrp mb-20">
+                <a class="btn btn-primary btn-sm" href="@Url.Action("Deletar", "Fornecedor", new { Id = Model.Id })">Excluir</a>
+            </span>
+        }
+    </form>
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+    <script>
+
+        function maskRG() {
+            $('.rg-validation').mask('0.000.000-0', { reverse: true });
+        }
+
+        function maskDate() {
+            $('.date-validation').mask('00/00/0000');
+        }
+
+        function maskPhones() {
+            $('.telefone-input').mask('(00) 00000-0000');
+        }
+
+        $(document).ready(function () {
+            $('.add-telefone').on('click', function () {
+
+                var newTelefone = $('.telefone-list')
+                    .find('.form-group:last-child')
+                    .clone();
+
+                newTelefone.find('input').val('');
+
+                $('.telefone-list').append(newTelefone);
+                maskPhones();
+            });
+
+            maskPhones();
+            maskRG();
+            maskDate();
+        });
+
+    </script>
+
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

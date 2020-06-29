@@ -1,0 +1,87 @@
+﻿@model Teste.Dev.Domain.Model.EmpresaLista
+@{
+    ViewBag.Title = "Listagem de empresas";
+    string mensagem = ViewBag.Mensagem;
+}
+<div class="page-title">
+    <h4>@(ViewBag.Title)</h4>
+    <a href="javascript: history.back()"><i class="hicon-arrowl"></i></a>
+</div>
+<div class="main-content">
+
+    @if (!string.IsNullOrWhiteSpace(mensagem))
+    {
+        <div class="alert alert-success" role="alert">
+            @mensagem
+        </div>
+    }
+
+    <form>
+        <div class="form-group">
+            <span class="btn-wrp mx-sm-1 mb-2">
+                <a class="btn btn-primary btn-sm" href="@Url.Action("InfoEmpresa", "Empresa", new { EmpresaId = 0 })">Adicionar Novo</a>
+            </span>
+        </div>
+    </form>
+    @Html.Partial("ConsultaEmpresaFiltroView")
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">Codigo</th>
+                <th scope="col">CNPJ</th>
+                <th scope="col">Nome</th>
+                <th scope="col">UF</th>
+                <th scope="col">Cadastro</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                for (var i = 0; i < Model.EmpresaList.Count; i++)
+                {
+                    <tr data-rowid="@i" class="LinhaPedido">
+                        <td>
+                            @Model.EmpresaList[i].Codigo
+                        </td>
+                        <td>
+                            @Model.EmpresaList[i].CNPJ
+                        </td>
+                        <td>
+                            @Model.EmpresaList[i].NomeFantasia
+                        </td>
+                        <td>
+                            @Model.EmpresaList[i].UF
+                        </td>
+                        <td>
+                            @Model.EmpresaList[i].DataCadastro.ToShortDateString()
+                        </td>
+                        <td>
+                            <a class="btn btn-primary btn-sm" href="@Url.Action("InfoEmpresa", "Empresa", new { Id = Model.EmpresaList[i].Id, Control = 1 })">Detalhar</a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+    <script>
+        function maskCNPJ() {
+            $('.cnpj-validation').mask('00.000.000/0000-00', { reverse: true });
+        }
+
+        function maskDate() {
+            $('.date-validation').mask("00/00/0000");
+        }
+
+        $(document).ready(function () {
+            maskCNPJ();
+            maskDate();
+        });
+    </script>
+
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

@@ -1,0 +1,98 @@
+﻿@model Teste.Dev.Domain.Model.FornecedorLista
+@{
+    ViewBag.Title = "Listagem de fornecedores";
+    string mensagem = ViewBag.Mensagem;
+}
+<div class="page-title">
+    <h4>@(ViewBag.Title)</h4>
+    <a href="javascript: history.back()"><i class="hicon-arrowl"></i></a>
+</div>
+<div class="main-content">
+
+    @if (!string.IsNullOrWhiteSpace(mensagem))
+    {
+        <div class="alert alert-success" role="alert">
+            @mensagem
+        </div>
+    }
+
+    <form>
+        <div class="form-group">
+            <span class="btn-wrp mx-sm-1 mb-2">
+                <a class="btn btn-primary btn-sm" href="@Url.Action("CadastroFornecedor", "Fornecedor", new { FornecedorId = 0 })">Adicionar Novo</a>
+            </span>
+        </div>
+    </form>
+    @Html.Partial("ConsultaFornecedorFiltroView")
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th class="wt10">Codigo</th>
+                <th class="wt10">Codigo empresa</th>
+                <th class="wt20">Documento</th>
+                <th class="wt50">Nome</th>
+                <th class="wt5">Pessoa</th>
+                <th class="wt10">Telefone</th>
+                <th class="wt10">RG</th>
+                <th class="wt10">Nascimento</th>
+                <th class="wt10">Cadastro</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                for (var i = 0; i < Model.FornecedorList.Count; i++)
+                {
+                    <tr data-rowid="@i" class="LinhaPedido">
+                        <td>
+                            @Model.FornecedorList[i].Codigo
+                        </td>
+                        <td>
+                            @Model.FornecedorList[i].CodigoEmpresa
+                        </td>
+                        <td>
+                            @Model.FornecedorList[i].Documento
+                        </td>
+                        <td>
+                            @Model.FornecedorList[i].NomeFantasia
+                        </td>
+                        <td>
+                            @Model.FornecedorList[i].Pessoa
+                        </td>
+                        <td>
+                            @Model.FornecedorList[i].Telefone.FirstOrDefault()
+                        </td>
+                        <td>
+                            @Model.FornecedorList[i].RG
+                        </td>
+                        <td>
+                            @Model.FornecedorList[i].DataNascimento.ToShortDateString()
+                        </td>
+                        <td>
+                            @Model.FornecedorList[i].DataCadastro.ToShortDateString()
+                        </td>
+                        <td>
+                            <a class="btn btn-primary btn-sm" href="@Url.Action("InfoFornecedor", "Fornecedor", new { Id = Model.FornecedorList[i].Id, Control = 1 })">Detalhar</a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+    <script>
+        function maskDate() {
+            $('.date-validation').mask("00/00/0000");
+        }
+
+        $(document).ready(function () {
+            maskDate();
+        });
+    </script>
+
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

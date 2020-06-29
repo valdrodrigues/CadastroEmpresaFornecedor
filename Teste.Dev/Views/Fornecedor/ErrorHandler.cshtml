@@ -1,0 +1,15 @@
+﻿@model Teste.Dev.Domain.Constante.ErrorHandler
+@{
+    ViewBag.Title = "View";
+}
+<div class="page-title">
+    <h4>@(ViewBag.Title)</h4>
+    <a href="javascript: history.back()"><i class="hicon-arrowl"></i></a>
+</div>
+<div class="main-content">
+    <h1>@Model.Erro</h1>
+    <pre>
+        @Model.DetalhamentoErro
+    </pre>
+</div>
+
